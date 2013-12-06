@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
     private QueueClient _client = new QueueClient();
     private ListView schoolListView = null;
     private Context context = this;
+    private SchoolListViewAdapter schoolListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,35 +33,44 @@ public class MainActivity extends Activity {
         setupSchoolsList();
     }
 
-    public void setupSchoolsList()
+    /**
+     * Populates the list view in the welcome screen with buttons of each school.
+     */
+    private void setupSchoolsList()
     {
         _client.get("schools.json", null, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(JSONArray response)
             {
+                //arraylist to send to the adapter to populate the views
                 ArrayList<String> schoolNamesArray = new ArrayList<String>();
                 for (int i = 0; i < response.length(); i++)
                 {
-                    TextView text = new TextView(context);
                     try
                     {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        schoolNamesArray.add(jsonObject.get("name").toString());
+                        JSONObject jsonSchoolObject = response.getJSONObject(i);
+                        schoolNamesArray.add(jsonSchoolObject.get("name").toString());
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
                     }
 
                 }
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout., schoolNamesArray);
-                schoolListView.setAdapter(adapter);
+                //create the adapter and send the JSONArray of the response as well so that we can
+                //grab out the classes for the selected school later.
+                schoolListViewAdapter = new SchoolListViewAdapter(context, R.layout.school_row, schoolNamesArray, response);
+                schoolListView.setAdapter(schoolListViewAdapter);
 
             }
         });
 
 
+    }
+
+    public QueueClient getClient()
+    {
+        return _client;
     }
 
 }

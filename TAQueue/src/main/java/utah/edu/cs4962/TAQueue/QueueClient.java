@@ -12,11 +12,12 @@ import org.json.JSONObject;
 import com.loopj.android.http.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by shong on 12/4/13.
  */
-public class QueueClient
+public class QueueClient implements Serializable
 {
     private static final String BASE_URL = "http://nine.eng.utah.edu/";
     private static JSONArray _response = null;

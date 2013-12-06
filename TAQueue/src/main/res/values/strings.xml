@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">TA Queue</string>
-
+    <string name="title_activity_class_selection">ClassSelectionActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
