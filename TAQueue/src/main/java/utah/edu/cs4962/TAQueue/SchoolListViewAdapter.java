@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,24 +65,30 @@ public class SchoolListViewAdapter extends ArrayAdapter<String>
         button.setText(_data.get(position));
         button.setOnClickListener(new View.OnClickListener()
         {
-
-
             @Override
             public void onClick(View v)
             {
                 //launch the class list activity and pass in the name of the selected university
                 Button button = (Button) v;
-                ListView listView = (ListView)button.getParent();
+                //need to get the parent of the button which is the listview item which is a relative layout
+                RelativeLayout buttonParent = (RelativeLayout) button.getParent();
+                //need to get the grandparent of the button in order to get the index of the button's parent
+                //which is the currently selected item.
+                ListView buttonGrandParent = (ListView) buttonParent.getParent();
+
+                //create the intent and store the name of the selected university
                 Intent classListActivityIntent = new Intent(_context, ClassSelectionActivity.class);
                 classListActivityIntent.putExtra("selected_school", button.getText());
 
+                //now get the school object for the selected school
                 try
                 {
-                    _jsonSchoolObject = _jsonArray.getJSONObject(listView.indexOfChild(button));
+                    _jsonSchoolObject = _jsonArray.getJSONObject(buttonGrandParent.indexOfChild(buttonParent));
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
                 }
+                //convert the selected school into a string that we store for the class selection activity
                 String jsonArrayString = _jsonSchoolObject.toString();
                 classListActivityIntent.putExtra("schools_json_object", jsonArrayString);
                 ((Activity) _context).startActivityForResult(classListActivityIntent, 1);
