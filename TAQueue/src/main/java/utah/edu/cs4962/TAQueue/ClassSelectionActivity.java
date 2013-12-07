@@ -87,7 +87,7 @@ public class ClassSelectionActivity extends Activity {
             e.printStackTrace();
         }
 
-        _classListViewAdapter = new ClassExpandableListViewAdapter(this, instructorNames, classNameItems);
+        _classListViewAdapter = new ClassExpandableListViewAdapter(this, instructorNames, classNameItems, _jsonSchoolObject);
         _classQueueListView.setAdapter(_classListViewAdapter);
     }
 

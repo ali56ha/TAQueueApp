@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,28 +23,19 @@ public class ClassExpandableListViewAdapter extends BaseExpandableListAdapter
     private List<String> _sectionHeaders;
     // maps the header to the child section items
     private HashMap<String, List<String>> _sectionItemMap;
+    //JSON object representing the chosen school with instructors and queues
+    private JSONObject _jsonSchoolObject;
 
     public ClassExpandableListViewAdapter(
             Context context,
             List<String> sectionHeader,
-            HashMap<String, List<String>> sectionItemMap)
+            HashMap<String, List<String>> sectionItemMap,
+            JSONObject jsonObject)
     {
         _context = context;
         _sectionHeaders = sectionHeader;
         _sectionItemMap = sectionItemMap;
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosititon)
-    {
-        return this._sectionItemMap.get(this._sectionHeaders.get(groupPosition))
-                .get(childPosititon);
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition)
-    {
-        return childPosition;
+        _jsonSchoolObject = jsonObject;
     }
 
     /**
@@ -101,11 +95,24 @@ public class ClassExpandableListViewAdapter extends BaseExpandableListAdapter
             @Override
             public void onClick(View v)
             {
+                TextView selectedClass = (TextView) v;
 
             }
         });
 
         return convertView;
+    }
+
+    @Override
+    public Object getChild(int groupPosition, int childPosititon)
+    {
+        return this._sectionItemMap.get(this._sectionHeaders.get(groupPosition)).get(childPosititon);
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition)
+    {
+        return childPosition;
     }
 
     @Override
