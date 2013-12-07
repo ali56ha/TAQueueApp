@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        style="@style/BannerTextTheme"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Sign into queue for"
+        android:id="@+id/topBanner"
+        />
+
+    <TextView
+        style="@style/BannerTextTheme"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:id="@+id/selected_queue_name"
+        android:layout_below="@+id/topBanner"/>
+
+    <TextView
+        style="@style/BannerTextTheme"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:id="@+id/error_banner"
+        android:layout_below="@+id/selected_queue_name"/>
+
+    <LinearLayout
+        android:id="@+id/button_options_view"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_below="@id/error_banner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+        <Button
+            android:id="@+id/student_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Student"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:id="@+id/ta_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="TA"
+            android:layout_weight="0.5"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/username_linearlayout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/button_options_view"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/username_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Username"
+            android:textSize="18dp"
+            android:layout_weight="0.4"/>
+
+        <EditText
+            style="@style/EditTextAppTheme"
+            android:id="@+id/username_edittext"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.14"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pwd_or_loc_linearlayout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/username_linearlayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/pwd_or_loc_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Location"
+            android:textSize="18dp"
+            android:layout_weight="0.4"/>
+
+        <EditText
+            style="@style/EditTextAppTheme"
+            android:id="@+id/pwd_or_loc_edittext"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.14"/>
+
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/login_button"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/tab_host_default_height"
+        android:layout_marginRight="@dimen/tab_host_default_height"
+        android:layout_below="@+id/pwd_or_loc_linearlayout"
+        android:layout_centerHorizontal="true"
+        android:text="Login"/>
+
+
+</RelativeLayout>

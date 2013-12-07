@@ -28,6 +28,10 @@
             android:name="utah.edu.cs4962.TAQueue.ClassSelectionActivity"
             android:label="@string/title_activity_class_selection" >
         </activity>
+        <activity
+            android:name="utah.edu.cs4962.TAQueue.QueueLoginActivity"
+            android:label="@string/title_activity_queue_login" >
+        </activity>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@ public class ClassSelectionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.class_selection_menu);
 
-        _classQueueListView = (ExpandableListView)findViewById(R.id.class_listview);
+        _classQueueListView = (ExpandableListView)findViewById(R.id.class_expandablelistview);
 
         //display the name of the selected university
         TextView selectedClassNameTextView = (TextView)findViewById(R.id.selected_class_name);
@@ -53,6 +53,7 @@ public class ClassSelectionActivity extends Activity {
     private void setUpClassesList()
     {
         HashMap<String, List<String>> classNameItems = new HashMap<String, List<String>>();
+        ArrayList<String> instructorNames = new ArrayList<String>();
         JSONArray jsonInstructorArray = null;
         try
         {
@@ -60,25 +61,33 @@ public class ClassSelectionActivity extends Activity {
             jsonInstructorArray = _jsonSchoolObject.getJSONArray("instructors");
             for (int i = 0; i < jsonInstructorArray.length(); i++)
             {
+                //names of all the classes this instructor has queues for
+                ArrayList<String> classNamesList = new ArrayList<String>();
+
                 //get the instructor JSON object
                 JSONObject jsonInstructorObject = jsonInstructorArray.getJSONObject(i);
 
                 //get the name of the instructor from the JSON object
                 String instructorName = jsonInstructorObject.getString("name");
+                instructorNames.add(instructorName);
 
                 //get the class queues for the current professor
-                JSONArray jsonClassesObject = jsonInstructorObject.getJSONArray("queues");
-                for(int k = 0; k < jsonClassesObject.length(); k++)
+                JSONArray jsonClassesArray = jsonInstructorObject.getJSONArray("queues");
+                for(int k = 0; k < jsonClassesArray.length(); k++)
                 {
-                    
+                    JSONObject jsonClassObject = new JSONObject(jsonClassesArray.getString(k));
+                    classNamesList.add(jsonClassObject.getString("title"));
                 }
+
+                //now map the instructor with the list of classes
+                classNameItems.put(instructorName, classNamesList);
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
 
-        _classListViewAdapter = new ClassExpandableListViewAdapter(this, R.layout.class_row, classJSONInstructorQueuesArray);
+        _classListViewAdapter = new ClassExpandableListViewAdapter(this, instructorNames, classNameItems);
         _classQueueListView.setAdapter(_classListViewAdapter);
     }
 
