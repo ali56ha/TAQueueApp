@@ -3,6 +3,7 @@ package utah.edu.cs4962.TAQueue;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,19 +12,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ClassSelectionActivity extends Activity {
     private String selectedSchoolName;
+    //the JSON object representing the selected school. Contains the instructors and queues
     private JSONObject _jsonSchoolObject;
-    private ListView _classQueueListView;
-    private ClassListViewAdapter _classListViewAdapter;
+    private ExpandableListView _classQueueListView;
+    private ClassExpandableListViewAdapter _classListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.class_selection_menu);
 
-        _classQueueListView = (ListView)findViewById(R.id.class_list_view);
+        _classQueueListView = (ExpandableListView)findViewById(R.id.class_listview);
 
         //display the name of the selected university
         TextView selectedClassNameTextView = (TextView)findViewById(R.id.selected_class_name);
@@ -48,22 +52,33 @@ public class ClassSelectionActivity extends Activity {
      */
     private void setUpClassesList()
     {
-        //holds JSON strings for each JSON object
-        ArrayList<String> classJSONInstructorQueuesArray = new ArrayList<String>();
+        HashMap<String, List<String>> classNameItems = new HashMap<String, List<String>>();
         JSONArray jsonInstructorArray = null;
         try
         {
+            //get the JSON array of the instructors
             jsonInstructorArray = _jsonSchoolObject.getJSONArray("instructors");
             for (int i = 0; i < jsonInstructorArray.length(); i++)
             {
-                classJSONInstructorQueuesArray.add(jsonInstructorArray.getJSONObject(i).toString());
+                //get the instructor JSON object
+                JSONObject jsonInstructorObject = jsonInstructorArray.getJSONObject(i);
+
+                //get the name of the instructor from the JSON object
+                String instructorName = jsonInstructorObject.getString("name");
+
+                //get the class queues for the current professor
+                JSONArray jsonClassesObject = jsonInstructorObject.getJSONArray("queues");
+                for(int k = 0; k < jsonClassesObject.length(); k++)
+                {
+                    
+                }
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
         }
 
-        _classListViewAdapter = new ClassListViewAdapter(this, R.layout.class_row, classJSONInstructorQueuesArray);
+        _classListViewAdapter = new ClassExpandableListViewAdapter(this, R.layout.class_row, classJSONInstructorQueuesArray);
         _classQueueListView.setAdapter(_classListViewAdapter);
     }
 

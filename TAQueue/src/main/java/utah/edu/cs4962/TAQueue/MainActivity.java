@@ -41,6 +41,10 @@ public class MainActivity extends Activity {
     {
         _client.get("schools.json", null, new JsonHttpResponseHandler()
         {
+            /**
+             * If the GET request was successful then set up the school list
+             * @param response - list of schools w/ instructors w/ queues
+             */
             @Override
             public void onSuccess(JSONArray response)
             {
@@ -50,7 +54,9 @@ public class MainActivity extends Activity {
                 {
                     try
                     {
+                        //the school JSON object
                         JSONObject jsonSchoolObject = response.getJSONObject(i);
+                        //the name of the school from the JSON object
                         schoolNamesArray.add(jsonSchoolObject.get("name").toString());
                     } catch (JSONException e)
                     {

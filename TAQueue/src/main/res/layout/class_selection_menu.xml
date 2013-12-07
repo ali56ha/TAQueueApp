@@ -19,18 +19,13 @@
         android:text="Select your class"
         style="@style/SubBannerTextTheme"/>
 
-    <ListView
-        style="@style/ListViewAppTheme"
-        android:id="@+id/class_list_view"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/tab_host_default_height"
-        android:layout_marginBottom="@dimen/tab_host_default_height"
-        android:layout_marginLeft="@dimen/tab_host_default_height"
-        android:layout_marginRight="@dimen/tab_host_default_height">
 
-    </ListView>
+    <ExpandableListView
+        style="@style/ListViewAppTheme"
+        android:id="@+id/class_expandablelistview"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/tab_host_default_height"/>
 
 
 </LinearLayout>

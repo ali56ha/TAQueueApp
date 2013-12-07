@@ -33,7 +33,13 @@ public class SchoolListViewAdapter extends ArrayAdapter<String>
     private JSONArray _jsonArray;
     private JSONObject _jsonSchoolObject;
 
-
+    /**
+     *
+     * @param context
+     * @param resourceID
+     * @param data - names of the schools
+     * @param jsonArray - the complete response of schools, instructors, and queues
+     */
     public SchoolListViewAdapter(Context context, int resourceID, ArrayList<String> data, JSONArray jsonArray)
     {
         super(context, resourceID, data);
@@ -80,7 +86,8 @@ public class SchoolListViewAdapter extends ArrayAdapter<String>
                 Intent classListActivityIntent = new Intent(_context, ClassSelectionActivity.class);
                 classListActivityIntent.putExtra("selected_school", button.getText());
 
-                //now get the school object for the selected school
+                //now get the school object for the selected school; ex: if U of U button is clicked,
+                //then grab the instructors and queues for the U of U
                 try
                 {
                     _jsonSchoolObject = _jsonArray.getJSONObject(buttonGrandParent.indexOfChild(buttonParent));
