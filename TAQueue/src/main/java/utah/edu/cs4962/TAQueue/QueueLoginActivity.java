@@ -169,6 +169,9 @@ public class QueueLoginActivity extends Activity
                 queueActivity.putExtra("id", _id);
                 queueActivity.putExtra("token", _token);
                 queueActivity.putExtra("isTA", isTA);
+                queueActivity.putExtra("class_number", _classNumber);
+                queueActivity.putExtra("instructor_username", _instructorUsername);
+                queueActivity.putExtra("school_abbrev", _schoolAbbrev);
                 this.startActivity(queueActivity);
             }
         } catch (JSONException e)

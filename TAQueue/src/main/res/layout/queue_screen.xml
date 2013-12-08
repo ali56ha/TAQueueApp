@@ -1,7 +1,99 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".QueueActivity"
-    tools:ignore="MergeRootFrame" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        style="@style/BannerTextTheme"
+        android:id="@+id/class_queue_name_banner"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        />
+
+    <EditText
+        style="@style/EditTextAppTheme"
+        android:id="@+id/queue_message_edittext"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/class_queue_name_banner"
+        android:text="Tap to add message"
+        android:textSize="20dp"
+        android:textColor="#bababa"
+        android:maxLines="1"
+        />
+
+    <LinearLayout
+        android:id="@+id/list_linearlayout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/queue_message_edittext"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin">
+
+        <ListView
+            style="@style/ListViewAppTheme"
+            android:id="@+id/tas_in_queue_listview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.9"
+            android:layout_marginRight="@dimen/activity_vertical_margin">
+
+        </ListView>
+
+        <ListView
+            style="@style/ListViewAppTheme"
+            android:id="@+id/students_in_queue_listview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5">
+
+            </ListView>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/list_linearlayout"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/enter_deactivate_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:text="Enter Queue"/>
+
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/freeze_exit_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:text="Exit Queue"/>
+        
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/signout_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:text="Sign Out"/>
+
+        </LinearLayout>
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
