@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="freezeblue">#6acff4</color>
+    <color name="deactivatered">#f87171</color>
+    <color name="notificationyellow">#eff85f</color>
+    <color name="activewhite">#f4f4f4</color>
+
+    <color name="studentdefault">#d0d0d0</color>
+
+    <color name="pink">#f86ddb</color>
+    <color name="blue">#5893f4</color>
+    <color name="green">#60f84e</color>
+    <color name="teal">#4ef8cb</color>
+    <color name="purple">#d397fd</color>
+    <color name="orange">#ffa731</color>
+
+</resources>
