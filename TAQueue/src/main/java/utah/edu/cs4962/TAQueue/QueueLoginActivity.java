@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,13 +36,15 @@ public class QueueLoginActivity extends Activity
     private boolean isTA = false;
     private String _id;
     private String _token;
-    private TextView _errorTextView = (TextView)findViewById(R.id.error_banner);
+    private TextView _errorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.queue_login);
+
+        _errorTextView = (TextView)findViewById(R.id.error_banner);
 
         _client = QueueClientFactory.getInstance();
 
@@ -100,47 +104,79 @@ public class QueueLoginActivity extends Activity
     private void loginUser(String username, String pwdOrLoc)
     {
         String studentOrTA;
-        if(isTA)
-            studentOrTA = "/tas";
-        else
-            studentOrTA = "/students";
-
-        String url = "/schools/" + _schoolAbbrev + "/" + _instructorUsername + "/" + _classNumber + studentOrTA;
-        _client.post(url, null, new JsonHttpResponseHandler()
+        RequestParams params = new RequestParams();
+        JSONObject jsonCredentialsObject = new JSONObject();
+        JSONObject jsonUserObject = new JSONObject();
+        try
         {
-            @Override
-            public void onSuccess(JSONObject response)
+            jsonCredentialsObject.put("username", username);
+
+            if(isTA)
             {
-                try
-                {
-                    _id = response.getString("id");
-                    _token = response.getString("token");
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+                studentOrTA = "/tas";
+                jsonCredentialsObject.put("password", pwdOrLoc);
+                jsonUserObject.put("ta", jsonCredentialsObject);
+                params.add("Authentication:", pwdOrLoc);
+            }
+            else
+            {
+                studentOrTA = "/students";
+                jsonCredentialsObject.put("location", pwdOrLoc);
+                jsonUserObject.put("student", jsonCredentialsObject);
+                params.add("Authentication:", "None");
             }
 
-            @Override
-            public  void onFailure(int statusCode, Throwable e, JSONObject errorResponse)
+            String url = "schools/" + _schoolAbbrev + "/" + _instructorUsername + "/" + _classNumber + studentOrTA;
+
+//            params
+            params.add("Parameters:", jsonUserObject.toString());
+
+            _client.post(url, params, new JsonHttpResponseHandler()
             {
-                String errorMsg = null;
-                try
+                @Override
+                public void onSuccess(JSONObject response)
                 {
-                    errorMsg = errorResponse.getString("errors");
-                } catch (JSONException e1)
-                {
-                    e1.printStackTrace();
+                    try
+                    {
+                        _id = response.getString("id");
+                        _token = response.getString("token");
+                    } catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("logged in successfully", "suceessfull");
                 }
-                _errorTextView.setText(errorMsg);
+
+                @Override
+                public  void onFailure(int statusCode, Throwable e, JSONObject errorResponse)
+                {
+                    String errorMsg = null;
+                    try
+                    {
+                        errorMsg = errorResponse.getString("errors");
+                    } catch (JSONException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                    _errorTextView.setText(errorMsg);
+                }
+            });
+
+            if(_id != null && _token != null)
+            {
+                Intent queueActivity = new Intent(this, QueueActivity.class);
+                queueActivity.putExtra("id", _id);
+                queueActivity.putExtra("token", _token);
+                queueActivity.putExtra("isTA", isTA);
+                this.startActivity(queueActivity);
             }
-        });
-
-
-        if(_id != null && _token != null)
+        } catch (JSONException e)
         {
-            Intent queueActivity = new Intent(this, QueueActivity.class);
+            e.printStackTrace();
         }
+
+
     }
 
 

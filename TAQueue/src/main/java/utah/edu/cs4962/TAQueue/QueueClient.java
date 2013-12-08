@@ -32,7 +32,6 @@ public class QueueClient
 
     public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(getAbsoluteUrl(url), params, responseHandler);
-
     }
 
     private String getAbsoluteUrl(String relativeUrl) {
