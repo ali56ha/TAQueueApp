@@ -1,15 +1,19 @@
 package utah.edu.cs4962.TAQueue;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,19 +27,23 @@ public class ClassExpandableListViewAdapter extends BaseExpandableListAdapter
     private List<String> _sectionHeaders;
     // maps the header to the child section items
     private HashMap<String, List<String>> _sectionItemMap;
-    //JSON object representing the chosen school with instructors and queues
-    private JSONObject _jsonSchoolObject;
+    private String _schoolAbbrev;
+    private HashMap<String, Pair<String, String>> _classInfoMap;
+    private QueueClient _client;
 
     public ClassExpandableListViewAdapter(
             Context context,
             List<String> sectionHeader,
             HashMap<String, List<String>> sectionItemMap,
-            JSONObject jsonObject)
+            String schoolAbbrev,
+            HashMap<String, Pair<String, String>> classInfoMap)
     {
         _context = context;
         _sectionHeaders = sectionHeader;
         _sectionItemMap = sectionItemMap;
-        _jsonSchoolObject = jsonObject;
+        _schoolAbbrev = schoolAbbrev;
+        _client = QueueClientFactory.getInstance();
+        _classInfoMap = classInfoMap;
     }
 
     /**
@@ -86,17 +94,26 @@ public class ClassExpandableListViewAdapter extends BaseExpandableListAdapter
             convertView = infalInflater.inflate(R.layout.class_row, null);
         }
 
-        TextView sectionItemTextView = (TextView) convertView.findViewById(R.id.section_list_item);
+        final TextView sectionItemTextView = (TextView) convertView.findViewById(R.id.section_list_item);
         sectionItemTextView.setText(className);
 
-        //add a listenter to the class item
+        //add a listener to the class item
         sectionItemTextView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 TextView selectedClass = (TextView) v;
+                Pair<String, String> classInfoPair = _classInfoMap.get(selectedClass.getText());
+                String classNumber = classInfoPair.second;
+                String instructorUsername = classInfoPair.first;
 
+                Intent queueLoginActivity = new Intent(_context, QueueLoginActivity.class);
+                queueLoginActivity.putExtra("school_abbrev", _schoolAbbrev);
+                queueLoginActivity.putExtra("class_number", classNumber);
+                queueLoginActivity.putExtra("instructor_username", instructorUsername);
+                queueLoginActivity.putExtra("class_name", selectedClass.getText());
+                _context.startActivity(queueLoginActivity);
             }
         });
 

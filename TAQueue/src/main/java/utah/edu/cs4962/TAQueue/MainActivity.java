@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
-    private QueueClient _client = new QueueClient();
+    private QueueClient _client = QueueClientFactory.getInstance();
     private ListView schoolListView = null;
     private Context context = this;
     private SchoolListViewAdapter schoolListViewAdapter;

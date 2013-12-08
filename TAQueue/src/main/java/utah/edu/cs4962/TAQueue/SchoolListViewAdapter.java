@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +41,11 @@ public class SchoolListViewAdapter extends ArrayAdapter<String>
      * @param data - names of the schools
      * @param jsonArray - the complete response of schools, instructors, and queues
      */
-    public SchoolListViewAdapter(Context context, int resourceID, ArrayList<String> data, JSONArray jsonArray)
+    public SchoolListViewAdapter(
+            Context context,
+            int resourceID,
+            ArrayList<String> data,
+            JSONArray jsonArray)
     {
         super(context, resourceID, data);
 
@@ -98,7 +103,7 @@ public class SchoolListViewAdapter extends ArrayAdapter<String>
                 //convert the selected school into a string that we store for the class selection activity
                 String jsonArrayString = _jsonSchoolObject.toString();
                 classListActivityIntent.putExtra("schools_json_object", jsonArrayString);
-                ((Activity) _context).startActivityForResult(classListActivityIntent, 1);
+                _context.startActivity(classListActivityIntent);
             }
         });
 

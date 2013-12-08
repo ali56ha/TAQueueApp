@@ -32,6 +32,10 @@
             android:name="utah.edu.cs4962.TAQueue.QueueLoginActivity"
             android:label="@string/title_activity_queue_login" >
         </activity>
+        <activity
+            android:name="utah.edu.cs4962.TAQueue.QueueActivity"
+            android:label="@string/title_activity_queue" >
+        </activity>
     </application>
 
 </manifest>

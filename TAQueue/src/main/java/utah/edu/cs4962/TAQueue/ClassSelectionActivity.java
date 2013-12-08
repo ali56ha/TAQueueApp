@@ -3,6 +3,7 @@ package utah.edu.cs4962.TAQueue;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public class ClassSelectionActivity extends Activity {
         Intent intent = getIntent();
         selectedSchoolName = intent.getStringExtra("selected_school");
 
-        //now get the JSON containing info about the queues
+                //now get the JSON containing info about the queues
         selectedClassNameTextView.setText("Queues for " + selectedSchoolName);
         try
         {
@@ -53,12 +54,15 @@ public class ClassSelectionActivity extends Activity {
     private void setUpClassesList()
     {
         HashMap<String, List<String>> classNameItems = new HashMap<String, List<String>>();
+        HashMap<String, Pair<String, String>> classInfoMap = new HashMap<String, Pair<String, String>>();
+        String schoolAbbrev = null;
         ArrayList<String> instructorNames = new ArrayList<String>();
         JSONArray jsonInstructorArray = null;
         try
         {
             //get the JSON array of the instructors
             jsonInstructorArray = _jsonSchoolObject.getJSONArray("instructors");
+            schoolAbbrev = _jsonSchoolObject.getString("abbreviation");
             for (int i = 0; i < jsonInstructorArray.length(); i++)
             {
                 //names of all the classes this instructor has queues for
@@ -70,6 +74,7 @@ public class ClassSelectionActivity extends Activity {
                 //get the name of the instructor from the JSON object
                 String instructorName = jsonInstructorObject.getString("name");
                 instructorNames.add(instructorName);
+                String instructorUsername = jsonInstructorObject.getString("username");
 
                 //get the class queues for the current professor
                 JSONArray jsonClassesArray = jsonInstructorObject.getJSONArray("queues");
@@ -77,6 +82,12 @@ public class ClassSelectionActivity extends Activity {
                 {
                     JSONObject jsonClassObject = new JSONObject(jsonClassesArray.getString(k));
                     classNamesList.add(jsonClassObject.getString("title"));
+
+                    classInfoMap.put(
+                            jsonClassObject.getString("title"),
+                            new Pair<String, String>(
+                                    instructorUsername,
+                                    jsonClassObject.getString("class_number")));
                 }
 
                 //now map the instructor with the list of classes
@@ -87,7 +98,12 @@ public class ClassSelectionActivity extends Activity {
             e.printStackTrace();
         }
 
-        _classListViewAdapter = new ClassExpandableListViewAdapter(this, instructorNames, classNameItems, _jsonSchoolObject);
+        _classListViewAdapter = new ClassExpandableListViewAdapter(
+                this,
+                instructorNames,
+                classNameItems,
+                schoolAbbrev,
+                classInfoMap);
         _classQueueListView.setAdapter(_classListViewAdapter);
     }
 

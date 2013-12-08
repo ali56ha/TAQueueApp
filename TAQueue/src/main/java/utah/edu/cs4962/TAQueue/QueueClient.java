@@ -1,5 +1,7 @@
 package utah.edu.cs4962.TAQueue;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -17,7 +19,7 @@ import java.io.Serializable;
 /**
  * Created by shong on 12/4/13.
  */
-public class QueueClient implements Serializable
+public class QueueClient
 {
     private static final String BASE_URL = "http://nine.eng.utah.edu/";
     private static JSONArray _response = null;
@@ -36,8 +38,4 @@ public class QueueClient implements Serializable
     private String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }
-
-
-
-
 }
