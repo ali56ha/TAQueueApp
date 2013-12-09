@@ -14,4 +14,7 @@
     <color name="purple">#d397fd</color>
     <color name="orange">#ffa731</color>
 
+    <color name="activetextgrey">#35393a</color>
+    <color name="inactivetextgrey">#bababa</color>
+
 </resources>

@@ -15,18 +15,19 @@ import java.util.ArrayList;
 /**
  * Created by shong on 12/8/13.
  */
-public class StudentListViewAdapter extends ArrayAdapter
+public class StudentListViewAdapter extends ArrayAdapter<String>
 {
     private ArrayList<String> _studentsInQueue;
     private Context _context;
     private int _resourceId;
-    private ArrayList<Integer> _colors;
+    private ArrayList<Integer> _colors = new ArrayList<Integer>();
 
     public StudentListViewAdapter(Context context, int resource, ArrayList<String> students)
     {
-        super(context, resource);
+        super(context, resource, students);
         _context = context;
         _studentsInQueue = students;
+        _resourceId = resource;
 
         _colors.add(R.color.blue);
         _colors.add(R.color.green);
@@ -46,7 +47,7 @@ public class StudentListViewAdapter extends ArrayAdapter
         {
             LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
             row = inflater.inflate(_resourceId, parent, false);
-            studentTextView = (TextView)row.findViewById(R.id.student_in_queue_textview);
+            studentTextView = (TextView)row.findViewById(R.id.queue_row_textview);
             row.setTag(studentTextView);
         }
         else

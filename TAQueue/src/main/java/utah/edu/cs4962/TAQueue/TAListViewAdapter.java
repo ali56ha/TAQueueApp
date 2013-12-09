@@ -19,7 +19,7 @@ public class TAListViewAdapter extends ArrayAdapter
     private ArrayList<String> _tasInQueue;
     private Context _context;
     private int _resourceId;
-    private ArrayList<Integer> _colors;
+    private ArrayList<Integer> _colors = new ArrayList<Integer>();
 
     public TAListViewAdapter(Context context, int resource, ArrayList<String> tasInQueue)
     {

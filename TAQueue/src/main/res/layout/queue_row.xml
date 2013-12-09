@@ -7,7 +7,7 @@
 
         <TextView
             style="@style/ListViewTextViewItemTheme"
-            android:id="@+id/student_in_queue_textview"
+            android:id="@+id/queue_row_textview"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"/>
 

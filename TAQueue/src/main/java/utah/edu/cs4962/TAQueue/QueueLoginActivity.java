@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -170,7 +171,7 @@ public class QueueLoginActivity extends Activity
                         queueActivity.putExtra("instructor_username", _instructorUsername);
                         queueActivity.putExtra("school_abbrev", _schoolAbbrev);
                         queueActivity.putExtra("username", _username);
-                        _context.startActivity(queueActivity);
+                        ((Activity)_context).startActivityForResult(queueActivity, 1);
                     }
                     else //go to the student activity
                     {
@@ -182,7 +183,7 @@ public class QueueLoginActivity extends Activity
                         queueActivity.putExtra("school_abbrev", _schoolAbbrev);
                         queueActivity.putExtra("username", _username);
                         queueActivity.putExtra("location", _location);
-                        _context.startActivity(queueActivity);
+                        ((Activity)_context).startActivityForResult(queueActivity, 1);
                     }
                 } catch (JSONException e)
                 {
@@ -199,9 +200,27 @@ public class QueueLoginActivity extends Activity
             @Override
             public void onFailure(int statusCode, Throwable e, JSONObject errorResponse)
             {
-                _errorTextView.setText("Invalid password");
+                try
+                {
+                    JSONArray jsonArray = errorResponse.getJSONArray("errors");
+                    String msg = "";
+                    for(int i = 0; i < jsonArray.length(); i++)
+                    {
+                        msg += jsonArray.getString(i) + " ";
+                    }
+                    _errorTextView.setText(msg);
+                } catch (JSONException e1)
+                {
+                    e1.printStackTrace();
+                }
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        //required to allow the activity to return, but there is nothing to do here.
+        _client = QueueClientFactory.getInstance();
     }
 
 

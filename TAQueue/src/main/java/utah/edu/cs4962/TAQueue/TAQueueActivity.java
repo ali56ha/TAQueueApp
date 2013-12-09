@@ -38,13 +38,13 @@ public class TAQueueActivity extends Activity
         _id = intent.getStringExtra("id");
         _token = intent.getStringExtra("token");
 
-        _queueMessageEditText = (EditText) findViewById(R.id.queue_message_edittext);
+        _queueMessageEditText = (EditText) findViewById(R.id.student_q_msg_banner);
         //TODO broadcast the message set to the server to be picked up by all clients
     }
-
+/*
     private void setUpSignOutButton()
     {
-        _signOutButton = (Button) findViewById(R.id.signout_button);
+        _signOutButton = (Button) findViewById(R.id.stud);
         _signOutButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -126,11 +126,11 @@ public class TAQueueActivity extends Activity
 
             }
         });
-    }
-
+    }*/
+/*
     private void getStudents()
     {
-        _studentsInQueue = (ListView) findViewById(R.id.students_in_queue_listview);
+        _studentsInQueue = (ListView) findViewById(R.id.stu);
         //TODO generate data to pass into the adapter
         _studentsInQueue.setAdapter(new StudentListViewAdapter(this, R.id.students_in_queue_listview, null));
         //if the user is a TA, then allow deletions to be performed on student items.
@@ -145,7 +145,7 @@ public class TAQueueActivity extends Activity
         _tasInQueue.setAdapter(new TAListViewAdapter(this, R.id.tas_in_queue_listview, null));
     }
 
-
+*/
 
 
 }

@@ -23,11 +23,14 @@ public class MainActivity extends Activity {
     private ListView schoolListView = null;
     private Context context = this;
     private SchoolListViewAdapter schoolListViewAdapter;
+    private int TIMEOUT = 20*10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_menu);
+
+        _client.setTimeout(TIMEOUT);
 
         schoolListView = (ListView) findViewById(R.id.school_list_view);
 

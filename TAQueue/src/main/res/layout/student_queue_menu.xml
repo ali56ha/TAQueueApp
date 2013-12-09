@@ -1,42 +1,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+    android:id="@+id/student_q_relativelayout">
 
     <TextView
         style="@style/BannerTextTheme"
-        android:id="@+id/class_queue_name_banner"
+        android:id="@+id/student_q_class_name_banner"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:gravity="center"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         />
 
-    <EditText
-        style="@style/EditTextAppTheme"
-        android:id="@+id/queue_message_edittext"
+    <TextView
+        style="@style/SubBannerTextTheme"
+        android:id="@+id/student_q_msg_banner"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:gravity="center"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_below="@id/class_queue_name_banner"
-        android:text="Tap to add message"
+        android:layout_below="@id/student_q_class_name_banner"
+        android:text="No TA announcements"
         android:textSize="20dp"
-        android:textColor="#bababa"
-        android:maxLines="1"
+        android:textColor="@color/inactivetextgrey"
         />
 
     <LinearLayout
         android:id="@+id/list_linearlayout"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_below="@id/queue_message_edittext"
+        android:layout_below="@id/student_q_msg_banner"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin">
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:clipToPadding="true"
+        android:layout_above="@+id/footer_linearlayout">
 
         <ListView
             style="@style/ListViewAppTheme"
-            android:id="@+id/tas_in_queue_listview"
+            android:id="@+id/student_q_tas_listview"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_weight="0.9"
@@ -46,7 +48,7 @@
 
         <ListView
             style="@style/ListViewAppTheme"
-            android:id="@+id/students_in_queue_listview"
+            android:id="@+id/student_q_students_listview"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_weight="0.5">
@@ -56,22 +58,25 @@
         </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/list_linearlayout"
-        android:layout_height="fill_parent"
+        android:id="@+id/footer_linearlayout"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_marginTop="@dimen/activity_horizontal_margin">
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        >
 
         <Button
             style="@style/ButtonAppTheme"
-            android:id="@+id/enter_deactivate_button"
+            android:id="@+id/student_q_enter_button"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
+            android:textSize="16dp"
             android:layout_weight="0.5"
             android:text="Enter Queue"/>
 
         <Button
             style="@style/ButtonAppTheme"
-            android:id="@+id/freeze_exit_button"
+            android:id="@+id/student_q_exit_button"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_weight="0.5"
@@ -79,18 +84,13 @@
         
         <Button
             style="@style/ButtonAppTheme"
-            android:id="@+id/signout_button"
+            android:id="@+id/student_q_signout_button"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_weight="0.5"
             android:text="Sign Out"/>
 
         </LinearLayout>
-
-
-
-
-
 
     </RelativeLayout>
 
