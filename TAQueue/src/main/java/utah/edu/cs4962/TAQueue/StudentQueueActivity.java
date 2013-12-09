@@ -304,7 +304,7 @@ public class StudentQueueActivity extends Activity
                 e.printStackTrace();
             }
         }
-        StudentListViewAdapter adapter = new StudentListViewAdapter(this, R.id.student_q_students_listview, studentsInQueueData);
+        StudentListViewAdapter adapter = new StudentListViewAdapter(this, R.layout.queue_row, studentsInQueueData);
         _studentsInQueueListView.setAdapter(adapter);
     }
 
@@ -324,7 +324,8 @@ public class StudentQueueActivity extends Activity
                 e.printStackTrace();
             }
         }
-        _tasInQueueListView.setAdapter(new TAListViewAdapter(this, R.id.student_q_tas_listview, tasInQueueData));
+        TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row, tasInQueueData);
+        _tasInQueueListView.setAdapter(adapter);
     }
 
 

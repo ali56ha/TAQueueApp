@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -40,18 +41,18 @@ public class TAListViewAdapter extends ArrayAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
-        Button button;
+        TextView button;
 
         if(row == null)
         {
             LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
             row = inflater.inflate(_resourceId, parent, false);
-            button = (Button)row.findViewById(R.id.ta_button);
+            button = (TextView)row.findViewById(R.id.queue_row_textview);
             row.setTag(button);
         }
         else
         {
-            button = (Button) row.getTag();
+            button = (TextView) row.getTag();
         }
 
         button.setText(_tasInQueue.get(position));

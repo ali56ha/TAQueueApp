@@ -67,7 +67,7 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
 
         //TODO set dismiss swipe listener
 
-        studentTextView.setBackgroundColor(_colors.get(position % 6));
+//        studentTextView.setBackgroundColor(_colors.get(position % 6));
 
         return row;
     }
