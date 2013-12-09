@@ -7,5 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_queue_login">QueueLoginActivity</string>
     <string name="title_activity_queue">QueueActivity</string>
+    <string name="title_activity_taqueue">TAQueueActivity</string>
 
 </resources>

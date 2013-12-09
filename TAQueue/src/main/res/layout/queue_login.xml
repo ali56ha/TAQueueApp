@@ -17,18 +17,21 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:id="@+id/selected_queue_name"
         android:layout_below="@+id/topBanner"/>
 
     <TextView
-        style="@style/BannerTextTheme"
+        style="@style/SubBannerTextTheme"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:id="@+id/error_banner"
-        android:layout_below="@+id/selected_queue_name"/>
+        android:layout_below="@+id/selected_queue_name"
+        android:textColor="#f62626"/>
 
     <LinearLayout
         android:id="@+id/button_options_view"
@@ -71,14 +74,16 @@
             android:layout_width="fill_parent"
             android:text="Username"
             android:textSize="18dp"
-            android:layout_weight="0.4"/>
+            android:layout_weight="0.4"
+            />
 
         <EditText
             style="@style/EditTextAppTheme"
             android:id="@+id/username_edittext"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:layout_weight="0.14"/>
+            android:layout_weight="0.14"
+            android:maxLines="1"/>
 
         </LinearLayout>
 
@@ -105,7 +110,8 @@
             android:id="@+id/pwd_or_loc_edittext"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:layout_weight="0.14"/>
+            android:layout_weight="0.14"
+            android:maxLines="1"/>
 
     </LinearLayout>
 
