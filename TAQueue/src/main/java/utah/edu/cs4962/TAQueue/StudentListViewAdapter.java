@@ -31,7 +31,12 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
     private ArrayList<Integer> _colors = new ArrayList<Integer>();
     private int _defaultColor;
 
-    public StudentListViewAdapter(Context context, int resource, ArrayList<String> students, HashMap<String, String> studentToTaMap)
+    public StudentListViewAdapter(
+            Context context,
+            int resource,
+            ArrayList<String> students,
+            HashMap<String, String> studentToTaMap,
+            ListView tasInQueue)
     {
         super(context, resource, students);
         _context = context;
@@ -45,7 +50,7 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
         _colors.add(R.color.teal);
         _colors.add(R.color.pink);
 
-        _tasInQueue = (ListView)((Activity) _context).findViewById(R.id.student_q_tas_listview);
+        _tasInQueue = tasInQueue;
         _adapter = (TAListViewAdapter)_tasInQueue.getAdapter();
         _taColorMap = _adapter.getColors();
         _studentToTaMap = studentToTaMap;

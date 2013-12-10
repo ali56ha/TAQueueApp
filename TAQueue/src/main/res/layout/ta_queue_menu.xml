@@ -1,7 +1,103 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TAQueueActivity"
-    tools:ignore="MergeRootFrame" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ta_q_relativelayout">
+
+    <TextView
+        style="@style/BannerTextTheme"
+        android:id="@+id/ta_q_class_name_banner"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        />
+
+    <EditText
+        style="@style/SubBannerTextTheme"
+        android:id="@+id/ta_q_msg_banner"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/ta_q_class_name_banner"
+        android:text="No TA announcements"
+        android:textSize="20dp"
+        android:textColor="@color/inactivetextgrey"
+        />
+
+    <LinearLayout
+        android:id="@+id/ta_q_list_linearlayout"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/ta_q_msg_banner"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:clipToPadding="true"
+        android:layout_above="@+id/ta_q_footer_linearlayout">
+
+        <ListView
+            style="@style/ListViewAppTheme"
+            android:id="@+id/ta_q_tas_listview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.9"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp">
+
+        </ListView>
+
+        <ListView
+            style="@style/ListViewAppTheme"
+            android:id="@+id/ta_q_students_listview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ta_q_footer_linearlayout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/ta_q_deactivate_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textSize="18dp"
+            android:layout_weight="0.5"
+            android:text="Deactivate"/>
+
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/ta_q_freeze_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:text="Freeze"/>
+
+        <Button
+            style="@style/ButtonAppTheme"
+            android:id="@+id/ta_q_signout_button"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:text="Sign Out"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+

@@ -38,6 +38,11 @@ public class QueueClient
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    public void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
+    {
+        client.put(url, params, responseHandler);
+    }
+
     public void delete(String url, AsyncHttpResponseHandler responseHandler)
     {
         client.delete(getAbsoluteUrl(url), responseHandler);

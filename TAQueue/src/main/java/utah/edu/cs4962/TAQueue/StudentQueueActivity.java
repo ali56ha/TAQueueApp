@@ -115,10 +115,6 @@ public class StudentQueueActivity extends Activity
             }
 
         }, 0, 10000);
-
-        //now get the state of the queue
-//        getQueueJSON();
-
     }
 
     private void getQueueJSON()
@@ -335,7 +331,12 @@ public class StudentQueueActivity extends Activity
         }
 
         studentToTAMap = getStudentToTaMap(jsonTaArray);
-        StudentListViewAdapter adapter = new StudentListViewAdapter(this, R.layout.queue_row, studentsInQueueData, studentToTAMap);
+        StudentListViewAdapter adapter = new StudentListViewAdapter(
+                this,
+                R.layout.queue_row,
+                studentsInQueueData,
+                studentToTAMap,
+                _tasInQueueListView);
         _studentsInQueueListView.setAdapter(adapter);
     }
 
