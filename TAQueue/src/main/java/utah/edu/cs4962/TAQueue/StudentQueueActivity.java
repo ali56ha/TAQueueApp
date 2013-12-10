@@ -1,6 +1,7 @@
 package utah.edu.cs4962.TAQueue;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +20,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StudentQueueActivity extends Activity
 {
     private QueueClient _client;
+    private Timer _timer;
+    private Context _context;
 
     private String _id;
     private String _token;
@@ -90,8 +96,28 @@ public class StudentQueueActivity extends Activity
         setUpExitButton();
         setUpEnterQueueButton();
 
+        _context = this;
+
+        _timer = new Timer();
+        _timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ((Activity)_context).runOnUiThread(new Runnable()
+                {
+
+                    @Override
+                    public void run()
+                    {
+                        Log.d("ran timer", "ran timer");
+                        getQueueJSON();
+                    }
+                });
+            }
+
+        }, 0, 10000);
+
         //now get the state of the queue
-        getQueueJSON();
+//        getQueueJSON();
 
     }
 
@@ -108,7 +134,6 @@ public class StudentQueueActivity extends Activity
                 {
                     _isFrozen = response.getBoolean("frozen");
                     _isActive = response.getBoolean("active");
-//                    _isQuestionBased = response.getBoolean("is_question_based");
                     setupMessageBanner(response.getString("status"));
 
                     //set up the color of the queue based on the queue state
@@ -124,6 +149,7 @@ public class StudentQueueActivity extends Activity
                     } else
                     {
                         _queueScreen.setBackgroundColor(_deactivatedColor);
+                        _inQueue = false;
                     }
 
                     //get the ta info
@@ -132,7 +158,7 @@ public class StudentQueueActivity extends Activity
 
                     //get the student info
                     JSONArray studentsInQueue = response.getJSONArray("students");
-                    setupStudentsListView(studentsInQueue);
+                    setupStudentsListView(studentsInQueue, tasInQueue);
 
                 } catch (JSONException e)
                 {
@@ -225,6 +251,7 @@ public class StudentQueueActivity extends Activity
                         {
                             //TODO see if it is possible to get the updated state of the queue
                             _inQueue = false;
+                            getQueueJSON();
                         }
 
                         @Override
@@ -285,9 +312,10 @@ public class StudentQueueActivity extends Activity
         });
     }
 
-    private void setupStudentsListView(JSONArray jsonArray)
+    private void setupStudentsListView(JSONArray jsonArray, JSONArray jsonTaArray)
     {
         ArrayList<String> studentsInQueueData = new ArrayList<String>();
+        HashMap<String, String> studentToTAMap = new HashMap<String, String>();
         for(int i = 0; i < jsonArray.length(); i++)
         {
             try
@@ -298,13 +326,16 @@ public class StudentQueueActivity extends Activity
                 if(inQueue)
                 {
                     studentsInQueueData.add(student);
+                    studentToTAMap.put(jsonStudentObject.getString("ta_id"), student);
                 }
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
-        StudentListViewAdapter adapter = new StudentListViewAdapter(this, R.layout.queue_row, studentsInQueueData);
+
+        studentToTAMap = getStudentToTaMap(jsonTaArray);
+        StudentListViewAdapter adapter = new StudentListViewAdapter(this, R.layout.queue_row, studentsInQueueData, studentToTAMap);
         _studentsInQueueListView.setAdapter(adapter);
     }
 
@@ -327,6 +358,28 @@ public class StudentQueueActivity extends Activity
         TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row, tasInQueueData);
         _tasInQueueListView.setAdapter(adapter);
     }
+
+    private HashMap<String, String> getStudentToTaMap(JSONArray jsonArray)
+    {
+        HashMap<String, String> studentToTAMap = new HashMap<String, String>();
+        for(int i = 0; i < jsonArray.length(); i++)
+        {
+            try
+            {
+                JSONObject jsonTaObject = jsonArray.getJSONObject(i);
+                String ta = jsonTaObject.getString("username");
+                JSONObject jsonStudentObject = jsonTaObject.getJSONObject("student");
+                String student = jsonStudentObject.getString("username") + "@" + jsonStudentObject.getString("location");
+                studentToTAMap.put(student, ta);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return studentToTAMap;
+    }
+
 
 
 }

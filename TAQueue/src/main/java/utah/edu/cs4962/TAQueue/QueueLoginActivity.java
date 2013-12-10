@@ -219,8 +219,9 @@ public class QueueLoginActivity extends Activity
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        //required to allow the activity to return, but there is nothing to do here.
         _client = QueueClientFactory.getInstance();
+        //clear any error messages that were set
+        _errorTextView.setText("");
     }
 
 
