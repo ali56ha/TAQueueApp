@@ -30,17 +30,20 @@ public class QueueClient
 
     private AsyncHttpClient client = new AsyncHttpClient();
 
-    public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
+    {
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
+    {
+
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
     public void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler)
     {
-        client.put(url, params, responseHandler);
+        client.put(getAbsoluteUrl(url), params, responseHandler);
     }
 
     public void delete(String url, AsyncHttpResponseHandler responseHandler)
@@ -53,6 +56,7 @@ public class QueueClient
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(id, token);
         Header header = BasicScheme.authenticate(credentials, "UTF-8", false);
         Header[] headers = {header};
+        client.removeHeader("Authorization");
         client.get(null, getAbsoluteUrl(url), headers, params, responseHandler);
     }
 
@@ -61,6 +65,7 @@ public class QueueClient
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(id, token);
         Header header = BasicScheme.authenticate(credentials, "UTF-8", false);
         Header[] headers = {header};
+        client.removeHeader("Authorization");
         client.delete(null, getAbsoluteUrl(url), headers, responseHandler);
     }
 
@@ -75,6 +80,12 @@ public class QueueClient
         basicAuth = Base64.encodeToString(basicAuth.getBytes(), Base64.NO_WRAP);
         client.addHeader("Authorization", "Basic " + basicAuth);
     }
+
+    public void removeAuthHeader()
+    {
+        client.removeHeader("Authorization");
+    }
+
 
     private String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;

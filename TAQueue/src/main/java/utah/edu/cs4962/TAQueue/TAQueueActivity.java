@@ -85,6 +85,8 @@ public class TAQueueActivity extends Activity
         _instructorUsername = intent.getStringExtra("instructor_username");
         _classNumber = intent.getStringExtra("class_number");
 
+        _client.setBasicAuth(_id, _token);
+
         _selectedClassNumberTextView = (TextView)findViewById(R.id.ta_q_class_name_banner);
         _selectedClassNumberTextView.setText(_classNumber);
 
@@ -128,8 +130,8 @@ public class TAQueueActivity extends Activity
 
     private void getQueueJSON()
     {
-        String url = "/queue.json";
-        _client.setBasicAuth(_id, _token);
+        String url = "queue.json";
+        _client.removeAuthHeader();
         _client.authGet(_id, _token, url, null, new JsonHttpResponseHandler()
         {
             @Override
@@ -147,13 +149,17 @@ public class TAQueueActivity extends Activity
                         if (_isFrozen)
                         {
                             _queueScreen.setBackgroundColor(_frozenColor);
+                            _freezeQueueButton.setText("Unfreeze");
                         } else
                         {
                             _queueScreen.setBackgroundColor(_activeColor);
+                            _freezeQueueButton.setText("Freeze");
+                            _deactivateQueueButton.setText("Deactivate");
                         }
                     } else
                     {
                         _queueScreen.setBackgroundColor(_deactivatedColor);
+                        _deactivateQueueButton.setText("Activate");
                     }
 
                     //get the ta info
@@ -182,6 +188,43 @@ public class TAQueueActivity extends Activity
                     e1.printStackTrace();
                 }
             }
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e)
+            {
+                Log.d("failed to get queue 2 ", responseBody);
+            }
+            @Override
+            public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
+            {
+                Log.d("failed to get queue 3 ", errorResponse.toString());
+            }
+            @Override
+            public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
+            {
+                try
+                {
+                    Log.d("failed to get queue 4 ", errorResponse.getString("errors"));
+                } catch (JSONException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+            @Override
+            public void	onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
+            {
+                Log.d("failed to get queue 5 ", errorResponse.toString());
+            }
+            @Override
+            public void	onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
+            {
+                try
+                {
+                    Log.d("failed to get queue 6 ", errorResponse.getString("errors"));
+                } catch (JSONException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
         });
     }
 
@@ -194,8 +237,8 @@ public class TAQueueActivity extends Activity
             public void onClick(View v)
             {
                 //TODO set a destroy request to the server
-                String url = "/tas/" + _id + ".json";
-                _client.setBasicAuth(_id, _token);
+                String url = "tas/" + _id + ".json";
+                _client.removeAuthHeader();
                 _client.authDelete(_id, _token, url, new JsonHttpResponseHandler()
                 {
                     @Override
@@ -212,12 +255,50 @@ public class TAQueueActivity extends Activity
                     {
                         try
                         {
-                            Log.d("ta signout failed", errorResponse.getString("errors"));
+                            Log.d("ta signout failed 1 ", errorResponse.getString("errors"));
                         } catch (JSONException e1)
                         {
                             e1.printStackTrace();
                         }
                     }
+                    @Override
+                    public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e)
+                    {
+                            Log.d("ta signout failed 2 ", responseBody);
+                    }
+                    @Override
+                    public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
+                    {
+                            Log.d("ta signout failed 3 ", errorResponse.toString());
+                    }
+                    @Override
+                    public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
+                    {
+                        try
+                        {
+                            Log.d("ta signout failed 4 ", errorResponse.getString("errors"));
+                        } catch (JSONException e1)
+                        {
+                            e1.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void	onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
+                    {
+                        Log.d("ta signout failed 5 ", errorResponse.toString());
+                    }
+                    @Override
+                    public void	onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
+                    {
+                        try
+                        {
+                            Log.d("ta signout failed 6 ", errorResponse.getString("errors"));
+                        } catch (JSONException e1)
+                        {
+                            e1.printStackTrace();
+                        }
+                    }
+
                 });
             }
         });
@@ -232,8 +313,8 @@ public class TAQueueActivity extends Activity
             {
                 RequestParams params = new RequestParams();
                 params.put("queue[frozen]", Boolean.toString(!_isFrozen));
-                _client.setBasicAuth(_id, _token);
-                _client.put("/queue.json", params, new JsonHttpResponseHandler()
+                _client.addAuthHeader(_id, _token);
+                _client.put("queue.json", params, new JsonHttpResponseHandler()
                 {
                     @Override
                     public void onSuccess(JSONObject response)
@@ -269,7 +350,7 @@ public class TAQueueActivity extends Activity
                 RequestParams params = new RequestParams();
                 params.put("queue[active]", Boolean.toString(!_isActive));
                 _client.addAuthHeader(_id, _token);
-                _client.put("/queue.json", params, new JsonHttpResponseHandler()
+                _client.put("queue.json", params, new JsonHttpResponseHandler()
                 {
                     @Override
                     public void onSuccess(JSONObject response)
