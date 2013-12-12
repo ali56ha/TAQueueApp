@@ -1,24 +1,12 @@
 package utah.edu.cs4962.TAQueue;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Base64;
-import android.util.Log;
 
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import com.loopj.android.http.*;
-
-import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Created by shong on 12/4/13.

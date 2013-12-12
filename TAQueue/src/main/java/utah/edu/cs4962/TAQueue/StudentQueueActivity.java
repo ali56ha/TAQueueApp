@@ -336,7 +336,8 @@ public class StudentQueueActivity extends Activity
                 R.layout.queue_row,
                 studentsInQueueData,
                 studentToTAMap,
-                _tasInQueueListView);
+                _tasInQueueListView,
+                false);
         _studentsInQueueListView.setAdapter(adapter);
     }
 

@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,18 +33,21 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
     private int _resourceId;
     private ArrayList<Integer> _colors = new ArrayList<Integer>();
     private int _defaultColor;
+    private boolean _isTa;
 
     public StudentListViewAdapter(
             Context context,
             int resource,
             ArrayList<String> students,
             HashMap<String, String> studentToTaMap,
-            ListView tasInQueue)
+            ListView tasInQueue,
+            boolean isTA)
     {
         super(context, resource, students);
         _context = context;
         _studentsInQueue = students;
         _resourceId = resource;
+        _isTa = isTA;
 
         _colors.add(R.color.blue);
         _colors.add(R.color.green);
@@ -61,18 +67,36 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
-        Button button;
+        Button studentName;
+        //only used in the TA case
+        Button removeButton = null;
+        Button putbackButton = null;
 
         if(row == null)
         {
             LayoutInflater inflater = ((Activity) _context).getLayoutInflater();
             row = inflater.inflate(_resourceId, parent, false);
-            button = (Button)row.findViewById(R.id.queue_row_button);
-            row.setTag(button);
+            if(_isTa)
+            {
+                studentName = (Button)row.findViewById(R.id.ta_queue_studentname_button);
+                removeButton = (Button)row.findViewById(R.id.ta_queue_remove_button);
+                putbackButton = (Button)row.findViewById(R.id.ta_queue_putback_button);
+            }
+            else
+            {
+                studentName = (Button)row.findViewById(R.id.queue_row_button);
+            }
+            row.setTag(studentName);
         }
         else
         {
-            button = (Button) row.getTag();
+            studentName = (Button) row.getTag();
+            if(_isTa)
+            {
+                removeButton = (Button)row.findViewById(R.id.ta_queue_remove_button);
+                putbackButton = (Button)row.findViewById(R.id.ta_queue_putback_button);
+            }
+
         }
 
         String student = _studentsInQueue.get(position);
@@ -82,16 +106,42 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
             color = _taColorMap.get(ta);
 
 
-        button.setText(_studentsInQueue.get(position));
+        studentName.setText(_studentsInQueue.get(position));
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setStroke(2, Color.BLACK);
         drawable.setColor(color);
-        button.setBackground(drawable);
+        studentName.setBackground(drawable);
 
-        //TODO set dismiss swipe listener
+        if(_isTa)
+        {
+            studentName.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
 
-//        studentTextView.setBackgroundColor(_colors.get(position % 6));
+                }
+            });
+
+            removeButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                }
+            });
+
+            putbackButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                }
+            });
+        }
 
         return row;
     }

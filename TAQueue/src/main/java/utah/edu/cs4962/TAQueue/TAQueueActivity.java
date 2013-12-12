@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +50,7 @@ public class TAQueueActivity extends Activity
     private Button _deactivateQueueButton;
     private Button _freezeQueueButton;
     private Button _signOutButton;
+    private GestureDetector _gestureDetector;
 
     private int _deactivatedColor;
     private int _activeColor;
@@ -61,6 +64,8 @@ public class TAQueueActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ta_queue_menu);
+
+
 
         _queueScreen = (RelativeLayout)findViewById(R.id.ta_q_relativelayout);
         _freezeQueueButton = (Button) findViewById(R.id.ta_q_freeze_button);
@@ -84,6 +89,8 @@ public class TAQueueActivity extends Activity
         _username = intent.getStringExtra("username");
         _instructorUsername = intent.getStringExtra("instructor_username");
         _classNumber = intent.getStringExtra("class_number");
+
+        _gestureDetector = new GestureDetector(new GestureListener(_id, _token));
 
         _client.setBasicAuth(_id, _token);
 
@@ -117,10 +124,70 @@ public class TAQueueActivity extends Activity
     private void setupMessageBanner(String msg)
     {
         //if there is a message display it, otherwise the default one will be displayed
-        if(msg != null)
+        if(msg != null && msg.trim().length() != 0)
         {
             _queueMessageEditText.setText(msg);
             _queueMessageEditText.setTextColor(_activeTextColor);
+            RequestParams params = new RequestParams();
+            params.put("queue[status]", msg);
+            _client.addAuthHeader(_id, _token);
+            _client.put("queue.json", params, new JsonHttpResponseHandler()
+            {
+                @Override
+                public void onSuccess(JSONObject response)
+                {
+                    getQueueJSON();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Throwable e, JSONObject errorResponse)
+                {
+                    try
+                    {
+                        Log.d("banner msg update failed 1", errorResponse.getString("errors"));
+                    } catch (JSONException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                }
+                @Override
+                public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e)
+                {
+                    Log.d("banner msg update failed 1", responseBody);
+                }
+                @Override
+                public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
+                {
+                    Log.d("banner msg update failed 1", errorResponse.toString());
+                }
+                @Override
+                public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
+                {
+                    try
+                    {
+                        Log.d("banner msg update failed 1", errorResponse.getString("errors"));
+                    } catch (JSONException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                }
+                @Override
+                public void	onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
+                {
+                    Log.d("banner msg update failed 1", errorResponse.toString());
+                }
+                @Override
+                public void	onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
+                {
+                    try
+                    {
+                        Log.d("banner msg update failed 1", errorResponse.getString("errors"));
+                    } catch (JSONException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                }
+            });
         }
         else
         {
@@ -402,10 +469,11 @@ public class TAQueueActivity extends Activity
         studentToTAMap = getStudentToTaMap(jsonTaArray);
         StudentListViewAdapter adapter = new StudentListViewAdapter(
                 this,
-                R.layout.queue_row,
+                R.layout.ta_queue_row,
                 studentsInQueueData,
                 studentToTAMap,
-                _tasInQueueListView);
+                _tasInQueueListView,
+                true);
         _studentsInQueueListView.setAdapter(adapter);
     }
 
