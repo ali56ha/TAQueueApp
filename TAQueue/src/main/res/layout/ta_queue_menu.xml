@@ -2,7 +2,9 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/ta_q_relativelayout">
+                android:id="@+id/ta_q_relativelayout"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true">
 
     <TextView
         style="@style/BannerTextTheme"

@@ -337,7 +337,10 @@ public class StudentQueueActivity extends Activity
                 studentsInQueueData,
                 studentToTAMap,
                 _tasInQueueListView,
-                false);
+                false,
+                null,
+                null,
+                null);
         _studentsInQueueListView.setAdapter(adapter);
     }
 

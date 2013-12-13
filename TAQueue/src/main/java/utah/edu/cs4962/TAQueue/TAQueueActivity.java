@@ -123,6 +123,7 @@ public class TAQueueActivity extends Activity
 
     private void setupMessageBanner(String msg)
     {
+        //todo have an event listener which will allow the ta to set the banner message
         //if there is a message display it, otherwise the default one will be displayed
         if(msg != null && msg.trim().length() != 0)
         {
@@ -195,7 +196,7 @@ public class TAQueueActivity extends Activity
         }
     }
 
-    private void getQueueJSON()
+    public void getQueueJSON()
     {
         String url = "queue.json";
         _client.removeAuthHeader();
@@ -422,7 +423,6 @@ public class TAQueueActivity extends Activity
                     @Override
                     public void onSuccess(JSONObject response)
                     {
-                        //TODO see if the response gives the updated state so we don't have to manually do it ourselves
                         //get the current queue state
                         getQueueJSON();
                         _isActive = !_isActive;
@@ -448,6 +448,7 @@ public class TAQueueActivity extends Activity
     {
         ArrayList<String> studentsInQueueData = new ArrayList<String>();
         HashMap<String, String> studentToTAMap = new HashMap<String, String>();
+        HashMap<String, String> studentToIdMap = new HashMap<String, String>();
         for(int i = 0; i < jsonArray.length(); i++)
         {
             try
@@ -467,19 +468,22 @@ public class TAQueueActivity extends Activity
         }
 
         studentToTAMap = getStudentToTaMap(jsonTaArray);
+        studentToIdMap = getStudentToIdMap(jsonArray);
         StudentListViewAdapter adapter = new StudentListViewAdapter(
                 this,
                 R.layout.ta_queue_row,
                 studentsInQueueData,
                 studentToTAMap,
                 _tasInQueueListView,
-                true);
+                true,
+                _id,
+                _token,
+                studentToIdMap);
         _studentsInQueueListView.setAdapter(adapter);
     }
 
     private void setupTasListView(JSONArray jsonArray)
     {
-        //TODO generate data to pass into the adapter
         ArrayList<String> tasInQueueData = new ArrayList<String>();
         for(int i = 0; i < jsonArray.length(); i++)
         {
@@ -518,7 +522,25 @@ public class TAQueueActivity extends Activity
         return studentToTAMap;
     }
 
+    private HashMap<String, String> getStudentToIdMap(JSONArray jsonArray)
+    {
+        HashMap<String, String> studentToIdMap = new HashMap<String, String>();
+        for(int i = 0; i < jsonArray.length(); i++)
+        {
+            try
+            {
+                JSONObject jsonStudentObject = jsonArray.getJSONObject(i);
+                String studentName = jsonStudentObject.getString("username");
+                String studentId = jsonStudentObject.getString("id");
+                studentToIdMap.put(studentName, studentId);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
 
+        return studentToIdMap;
+    }
 
 
 }
