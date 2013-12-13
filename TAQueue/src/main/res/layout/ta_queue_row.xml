@@ -12,7 +12,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_weight=".5"
         android:textSize="18dp"
@@ -21,7 +21,7 @@
     <Button
         style="@style/ButtonAppTheme"
         android:id="@+id/ta_queue_remove_button"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:textSize="18dp"
         android:layout_weight=".9"
@@ -30,7 +30,7 @@
     <Button
         style="@style/ButtonAppTheme"
         android:id="@+id/ta_queue_putback_button"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:textSize="18dp"
         android:layout_weight=".9"

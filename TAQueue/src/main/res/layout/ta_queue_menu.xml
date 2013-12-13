@@ -26,6 +26,7 @@
         android:text="No TA announcements"
         android:textSize="20dp"
         android:textColor="@color/inactivetextgrey"
+        android:maxLines="1"
         />
 
     <LinearLayout
