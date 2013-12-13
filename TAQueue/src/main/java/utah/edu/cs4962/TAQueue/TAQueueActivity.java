@@ -114,6 +114,8 @@ public class TAQueueActivity extends Activity
 
         _context = this;
 
+        //TODO make this a push system
+        //poll the server for new queue info.
         _timer = new Timer();
         _timer.schedule(new TimerTask() {
             @Override
@@ -132,6 +134,10 @@ public class TAQueueActivity extends Activity
         }, 0, 10000);
     }
 
+    /**
+     * Set the message banner text if a new one was given
+     * @param msg
+     */
     private void setupMessageBanner(String msg)
     {
         //todo have an event listener which will allow the ta to set the banner message
@@ -144,6 +150,9 @@ public class TAQueueActivity extends Activity
         }
     }
 
+    /**
+     * Get the most recent queue info from the server
+     */
     public void getQueueJSON()
     {
         String url = "queue.json";
@@ -251,6 +260,9 @@ public class TAQueueActivity extends Activity
         });
     }
 
+    /**
+     * Set up the signout button
+     */
     private void setUpSignOutButton()
     {
         _signOutButton = (Button) findViewById(R.id.ta_q_signout_button);
@@ -332,6 +344,9 @@ public class TAQueueActivity extends Activity
         });
     }
 
+    /**
+     * Set up the freeze/unfreeze button
+     */
     private void setUpFreezeButton()
     {
         _freezeQueueButton.setOnClickListener(new View.OnClickListener()
@@ -368,6 +383,9 @@ public class TAQueueActivity extends Activity
         });
     }
 
+    /**
+     * Set up the deactivate/activate button
+     */
     private void setUpDeactivateQueueButton()
     {
         _deactivateQueueButton.setOnClickListener(new View.OnClickListener()
@@ -404,6 +422,12 @@ public class TAQueueActivity extends Activity
         });
     }
 
+    /**
+     * Get the students in the queue who are entered into the queue.
+     *
+     * @param jsonArray
+     * @param jsonTaArray
+     */
     private void setupStudentsListView(JSONArray jsonArray, JSONArray jsonTaArray)
     {
         ArrayList<String> studentsInQueueData = new ArrayList<String>();
@@ -495,6 +519,13 @@ public class TAQueueActivity extends Activity
         }
     }
 
+    /**
+     * Get the list of TAs in the queue.
+     *
+     * Map the colors the TAs are in the app so that the student a TA is helping will also have that
+     * color.
+     * @param jsonArray
+     */
     private void setupTasListView(JSONArray jsonArray)
     {
         ArrayList<String> tasInQueueData = new ArrayList<String>();
@@ -525,8 +556,11 @@ public class TAQueueActivity extends Activity
         }
     }
 
-
-
+    /**
+     * Map the student username and location as a string to the TA helping the student.
+     * @param jsonArray
+     * @return
+     */
     private HashMap<String, String> getStudentToTaMap(JSONArray jsonArray)
     {
         HashMap<String, String> studentToTAMap = new HashMap<String, String>();
@@ -548,6 +582,11 @@ public class TAQueueActivity extends Activity
         return studentToTAMap;
     }
 
+    /**
+     * Map the student username to the id given by the server
+     * @param jsonArray
+     * @return
+     */
     private HashMap<String, String> getStudentToIdMap(JSONArray jsonArray)
     {
         HashMap<String, String> studentToIdMap = new HashMap<String, String>();
@@ -568,6 +607,13 @@ public class TAQueueActivity extends Activity
         return studentToIdMap;
     }
 
+    /**
+     * Set up the listener for the queue message banner.
+     *
+     * Uses a touch listener to detect when a user starts entering a message.
+     *
+     * Uses an editor listener to detect when the user is finished entering a message.
+     */
     private void setupEditTextListener()
     {
         _queueMessageEditText.setOnTouchListener(new View.OnTouchListener()
@@ -580,7 +626,6 @@ public class TAQueueActivity extends Activity
                 {
                     _queueMessageEditText.setText("");
                     _queueMessageEditText.setTextColor(_activeTextColor);
-//                    _queueMessageEditText.setFocusable(true);
                 }
 
                 return false;
@@ -597,7 +642,6 @@ public class TAQueueActivity extends Activity
                 {
                     InputMethodManager input =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     input.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                    _queueMessageEditText.setFocusable(false);
                     _queueMessageEditText.clearFocus();
 
                     String msg = v.getText().toString();
