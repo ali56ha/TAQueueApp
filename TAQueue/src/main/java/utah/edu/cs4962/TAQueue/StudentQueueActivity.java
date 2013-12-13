@@ -58,12 +58,21 @@ public class StudentQueueActivity extends Activity
     private int _frozenColor;
     private int _inactivieTextColor;
     private int _activeTextColor;
+    private ArrayList<Integer> _colors = new ArrayList<Integer>();
+    private HashMap<String, Integer> _colorMap = new HashMap<String, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_queue_menu);
+
+        _colors.add(getResources().getColor(R.color.blue));
+        _colors.add(getResources().getColor(R.color.green));
+        _colors.add(getResources().getColor(R.color.orange));
+        _colors.add(getResources().getColor(R.color.purple));
+        _colors.add(getResources().getColor(R.color.teal));
+        _colors.add(getResources().getColor(R.color.pink));
 
         _queueScreen = (RelativeLayout)findViewById(R.id.student_q_relativelayout);
         _exitQueueButton = (Button) findViewById(R.id.student_q_exit_button);
@@ -331,23 +340,36 @@ public class StudentQueueActivity extends Activity
         }
 
         studentToTAMap = getStudentToTaMap(jsonTaArray);
-        StudentListViewAdapter adapter = new StudentListViewAdapter(
-                this,
-                R.layout.queue_row,
-                studentsInQueueData,
-                studentToTAMap,
-                _tasInQueueListView,
-                false,
-                null,
-                null,
-                null);
-        _studentsInQueueListView.setAdapter(adapter);
+        if(_studentsInQueueListView.getAdapter() == null)
+        {
+            StudentListViewAdapter adapter = new StudentListViewAdapter(
+                    this,
+                    R.layout.queue_row,
+                    studentsInQueueData,
+                    studentToTAMap,
+                    _colorMap,
+                    false,
+                    null,
+                    null,
+                    null);
+            _studentsInQueueListView.setAdapter(adapter);
+        }
+        else
+        {
+            ((StudentListViewAdapter)_studentsInQueueListView.getAdapter()).setParams(
+                    studentsInQueueData,
+                    studentToTAMap,
+                    _tasInQueueListView,
+                    null,
+                    _colorMap);
+        }
     }
 
     private void setupTasListView(JSONArray jsonArray)
     {
         //TODO generate data to pass into the adapter
         ArrayList<String> tasInQueueData = new ArrayList<String>();
+        _colorMap = new HashMap<String, Integer>();
         for(int i = 0; i < jsonArray.length(); i++)
         {
             try
@@ -355,18 +377,29 @@ public class StudentQueueActivity extends Activity
                 JSONObject jsonTaObject = jsonArray.getJSONObject(i);
                 String ta = jsonTaObject.getString("username");
                 tasInQueueData.add(ta);
+                _colorMap.put(ta, _colors.get(i % _colors.size()));
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
-        TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row, tasInQueueData);
-        _tasInQueueListView.setAdapter(adapter);
+        if(_tasInQueueListView.getAdapter() == null)
+        {
+            TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row,
+                    tasInQueueData, _colorMap);
+            _tasInQueueListView.setAdapter(adapter);
+        }
+        else
+        {
+            ((TAListViewAdapter)_tasInQueueListView.getAdapter()).refill(tasInQueueData,
+                    _colorMap);
+        }
     }
 
     private HashMap<String, String> getStudentToTaMap(JSONArray jsonArray)
     {
         HashMap<String, String> studentToTAMap = new HashMap<String, String>();
+
         for(int i = 0; i < jsonArray.length(); i++)
         {
             try

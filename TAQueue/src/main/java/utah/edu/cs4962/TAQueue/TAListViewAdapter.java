@@ -22,22 +22,18 @@ public class TAListViewAdapter extends ArrayAdapter
     private ArrayList<String> _tasInQueue;
     private Context _context;
     private int _resourceId;
-    private ArrayList<Integer> _colors = new ArrayList<Integer>();
-    private HashMap<String, Integer> _itemColorMap = new HashMap<String, Integer>();
 
-    public TAListViewAdapter(Context context, int resource, ArrayList<String> tasInQueue)
+    private HashMap<String, Integer> _colorMap = new HashMap<String, Integer>();
+
+    public TAListViewAdapter(Context context, int resource,
+                             ArrayList<String> tasInQueue,
+                             HashMap<String, Integer> colorMap)
     {
         super(context, resource, tasInQueue);
         _context = context;
         _resourceId = resource;
         _tasInQueue = tasInQueue;
-
-        _colors.add(R.color.blue);
-        _colors.add(R.color.green);
-        _colors.add(R.color.orange);
-        _colors.add(R.color.purple);
-        _colors.add(R.color.teal);
-        _colors.add(R.color.pink);
+        _colorMap = colorMap;
     }
 
     @Override
@@ -63,16 +59,17 @@ public class TAListViewAdapter extends ArrayAdapter
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setStroke(2, Color.BLACK);
-        int color = _context.getResources().getColor(_colors.get(position % 6));
-        _itemColorMap.put(_tasInQueue.get(position), color);
+        int color = _colorMap.get(_tasInQueue.get(position));
         drawable.setColor(color);
         button.setBackground(drawable);
 
         return row;
     }
 
-    public HashMap<String, Integer> getColors()
-    {
-        return _itemColorMap;
+    public void refill(ArrayList<String> tas, HashMap<String, Integer> colorMap) {
+        _tasInQueue.clear();
+        _tasInQueue.addAll(tas);
+        _colorMap = colorMap;
+        notifyDataSetChanged();
     }
 }

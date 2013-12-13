@@ -34,10 +34,9 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
     private HashMap<String, Integer> _taColorMap;
     private HashMap<String, String> _studentToIdMap;
     private TAListViewAdapter _adapter;
-    private ListView _tasInQueue;
+    private ArrayList<String> _tasInQueue;
     private Context _context;
     private int _resourceId;
-    private ArrayList<Integer> _colors = new ArrayList<Integer>();
     private int _defaultColor;
     private boolean _isTa;
     private QueueClient _client;
@@ -46,12 +45,13 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
 
     //TODO add a hashmap of students to their ids
     //todo add the info for the TA in order to make requests
+
     public StudentListViewAdapter(
             Context context,
             int resource,
             ArrayList<String> students,
             HashMap<String, String> studentToTaMap,
-            ListView tasInQueue,
+            HashMap<String, Integer> taColorMap,
             boolean isTA,
             String taId,
             String taToken,
@@ -65,21 +65,12 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
         _taId = taId;
         _taToken = taToken;
         _studentToIdMap = studentToIdMap;
+        _taColorMap = taColorMap;
         if(_isTa)
         {
             _client = QueueClientFactory.getInstance();
         }
 
-        _colors.add(R.color.blue);
-        _colors.add(R.color.green);
-        _colors.add(R.color.orange);
-        _colors.add(R.color.purple);
-        _colors.add(R.color.teal);
-        _colors.add(R.color.pink);
-
-        _tasInQueue = tasInQueue;
-        _adapter = (TAListViewAdapter)_tasInQueue.getAdapter();
-        _taColorMap = _adapter.getColors();
         _studentToTaMap = studentToTaMap;
         _defaultColor = ((Activity) _context).getResources().getColor(R.color.activewhite);
     }
@@ -126,8 +117,25 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
         String student = _studentsInQueue.get(position);
         String ta = _studentToTaMap.get(student);
         int color = _defaultColor;
-        if(ta != null)
-            color = _taColorMap.get(ta);
+        if(_taColorMap != null)
+        {
+            if(_taColorMap.size() > 0)
+            {
+                if(ta != null)
+                {
+                    try
+                    {
+                        color = _taColorMap.get(ta);
+                    }
+                    catch(Exception e)
+                    {
+                        Integer integer = _taColorMap.get(ta);
+                        if(integer != null)
+                            color = integer;
+                    }
+                }
+            }
+        }
 
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
@@ -149,6 +157,21 @@ public class StudentListViewAdapter extends ArrayAdapter<String>
         }
 
         return row;
+    }
+
+    public void setParams(
+            ArrayList<String> students,
+            HashMap<String, String> studentToTaMap,
+            ListView tasInQueue,
+            HashMap<String, String> studentToIdMap,
+            HashMap<String, Integer> taColorMap)
+    {
+        _studentsInQueue.clear();
+        _studentsInQueue.addAll(students);
+        _studentToTaMap = studentToTaMap;
+        _studentToIdMap = studentToIdMap;
+        _taColorMap = taColorMap;
+        notifyDataSetChanged();
     }
 
     private void setupStudentButton(TAQueueRow taQueueRow)

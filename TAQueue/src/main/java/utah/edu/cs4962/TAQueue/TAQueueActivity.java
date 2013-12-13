@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,7 +56,9 @@ public class TAQueueActivity extends Activity
     private int _frozenColor;
     private int _inactivieTextColor;
     private int _activeTextColor;
-    private int _newStudentColor;
+    private int _notificationColor;
+    private ArrayList<Integer> _colors = new ArrayList<Integer>();
+    private HashMap<String, Integer> _colorMap = new HashMap<String, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,7 +66,12 @@ public class TAQueueActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ta_queue_menu);
 
-
+        _colors.add(getResources().getColor(R.color.blue));
+        _colors.add(getResources().getColor(R.color.green));
+        _colors.add(getResources().getColor(R.color.orange));
+        _colors.add(getResources().getColor(R.color.purple));
+        _colors.add(getResources().getColor(R.color.teal));
+        _colors.add(getResources().getColor(R.color.pink));
 
         _queueScreen = (RelativeLayout)findViewById(R.id.ta_q_relativelayout);
         _freezeQueueButton = (Button) findViewById(R.id.ta_q_freeze_button);
@@ -79,6 +85,7 @@ public class TAQueueActivity extends Activity
         _activeColor = getResources().getColor(R.color.activewhite);
         _activeTextColor = getResources().getColor(R.color.activetextgrey);
         _inactivieTextColor = getResources().getColor(R.color.inactivetextgrey);
+        _notificationColor = getResources().getColor(R.color.notificationyellow);
 
         _client = QueueClientFactory.getInstance();
 
@@ -256,18 +263,21 @@ public class TAQueueActivity extends Activity
                     e1.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e)
             {
                 Log.d("failed to get queue 2 ", responseBody);
             }
+
             @Override
-            public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
             {
                 Log.d("failed to get queue 3 ", errorResponse.toString());
             }
+
             @Override
-            public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
             {
                 try
                 {
@@ -277,13 +287,15 @@ public class TAQueueActivity extends Activity
                     e1.printStackTrace();
                 }
             }
+
             @Override
-            public void	onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
+            public void onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
             {
                 Log.d("failed to get queue 5 ", errorResponse.toString());
             }
+
             @Override
-            public void	onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
+            public void onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
             {
                 try
                 {
@@ -329,18 +341,21 @@ public class TAQueueActivity extends Activity
                             e1.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e)
                     {
-                            Log.d("ta signout failed 2 ", responseBody);
+                        Log.d("ta signout failed 2 ", responseBody);
                     }
+
                     @Override
-                    public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
+                    public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONArray errorResponse)
                     {
-                            Log.d("ta signout failed 3 ", errorResponse.toString());
+                        Log.d("ta signout failed 3 ", errorResponse.toString());
                     }
+
                     @Override
-                    public void	onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
+                    public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.Throwable e, org.json.JSONObject errorResponse)
                     {
                         try
                         {
@@ -350,13 +365,15 @@ public class TAQueueActivity extends Activity
                             e1.printStackTrace();
                         }
                     }
+
                     @Override
-                    public void	onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
+                    public void onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse)
                     {
                         Log.d("ta signout failed 5 ", errorResponse.toString());
                     }
+
                     @Override
-                    public void	onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
+                    public void onFailure(java.lang.Throwable e, org.json.JSONObject errorResponse)
                     {
                         try
                         {
@@ -469,22 +486,76 @@ public class TAQueueActivity extends Activity
 
         studentToTAMap = getStudentToTaMap(jsonTaArray);
         studentToIdMap = getStudentToIdMap(jsonArray);
-        StudentListViewAdapter adapter = new StudentListViewAdapter(
-                this,
-                R.layout.ta_queue_row,
-                studentsInQueueData,
-                studentToTAMap,
-                _tasInQueueListView,
-                true,
-                _id,
-                _token,
-                studentToIdMap);
-        _studentsInQueueListView.setAdapter(adapter);
+
+        //TODO find a better place to put this code. This is terrible place to put it
+        //set the color of the queue based on the ratio of students in the queue to the number being helped
+        if(studentsInQueueData.size() > studentToTAMap.size())
+        {
+            if(_isActive)
+            {
+                if(!_isFrozen)
+                {
+                    _queueScreen.setBackgroundColor(_notificationColor);
+                }
+                else
+                {
+                    _queueScreen.setBackgroundColor(_frozenColor);
+                }
+            }
+            else
+            {
+                _queueScreen.setBackgroundColor(_deactivatedColor);
+            }
+
+        }
+        else
+        {
+            if(_isActive)
+            {
+                if(!_isFrozen)
+                {
+                    _queueScreen.setBackgroundColor(_activeColor);
+                }
+                else
+                {
+                    _queueScreen.setBackgroundColor(_frozenColor);
+                }
+            }
+            else
+            {
+                _queueScreen.setBackgroundColor(_deactivatedColor);
+            }
+        }
+
+        if(_studentsInQueueListView.getAdapter() == null)
+        {
+            StudentListViewAdapter adapter = new StudentListViewAdapter(
+                    this,
+                    R.layout.ta_queue_row,
+                    studentsInQueueData,
+                    studentToTAMap,
+                    _colorMap,
+                    true,
+                    _id,
+                    _token,
+                    studentToIdMap);
+            _studentsInQueueListView.setAdapter(adapter);
+        }
+        else
+        {
+            ((StudentListViewAdapter)_studentsInQueueListView.getAdapter()).setParams(
+                    studentsInQueueData,
+                    studentToTAMap,
+                    _tasInQueueListView,
+                    studentToIdMap,
+                    _colorMap);
+        }
     }
 
     private void setupTasListView(JSONArray jsonArray)
     {
         ArrayList<String> tasInQueueData = new ArrayList<String>();
+        _colorMap = new HashMap<String, Integer>();
         for(int i = 0; i < jsonArray.length(); i++)
         {
             try
@@ -492,14 +563,26 @@ public class TAQueueActivity extends Activity
                 JSONObject jsonTaObject = jsonArray.getJSONObject(i);
                 String ta = jsonTaObject.getString("username");
                 tasInQueueData.add(ta);
+                _colorMap.put(ta, _colors.get(i % _colors.size()));
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
         }
-        TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row, tasInQueueData);
-        _tasInQueueListView.setAdapter(adapter);
+
+        if(_tasInQueueListView.getAdapter() == null)
+        {
+            TAListViewAdapter adapter = new TAListViewAdapter(this, R.layout.queue_row,
+                    tasInQueueData, _colorMap);
+            _tasInQueueListView.setAdapter(adapter);
+        }
+        else
+        {
+            ((TAListViewAdapter)_tasInQueueListView.getAdapter()).refill(tasInQueueData, _colorMap);
+        }
     }
+
+
 
     private HashMap<String, String> getStudentToTaMap(JSONArray jsonArray)
     {
